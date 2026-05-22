@@ -11,12 +11,12 @@ void main() {
       expect(SaiaSpiritRank.legend.descriptionKey, SaiaCoreTranslationConstants.spiritRankLegendDesc);
     });
 
-    test('Should return correct default Spanish fallbacks with correct accents', () {
-      expect(SaiaSpiritRank.dormant.displayName, 'Dormido');
-      expect(SaiaSpiritRank.dormant.description, 'Tu espíritu aún no despierta');
+    test('Should return correct default English fallbacks', () {
+      expect(SaiaSpiritRank.dormant.displayName, 'Dormant');
+      expect(SaiaSpiritRank.dormant.description, 'Your spirit has not awakened yet');
 
-      expect(SaiaSpiritRank.master.displayName, 'Maestro');
-      expect(SaiaSpiritRank.master.description, 'Alineación profunda contigo');
+      expect(SaiaSpiritRank.master.displayName, 'Master');
+      expect(SaiaSpiritRank.master.description, 'Deep alignment with you');
     });
   });
 
@@ -29,12 +29,12 @@ void main() {
       expect(SaiaVoiceMode.ultimateClone.descriptionKey, SaiaCoreTranslationConstants.voiceModeUltimateCloneDesc);
     });
 
-    test('Should return correct default Spanish fallbacks with correct accents', () {
-      expect(SaiaVoiceMode.design.displayName, 'Diseñar voz');
-      expect(SaiaVoiceMode.clone.displayName, 'Clonar voz');
-      expect(SaiaVoiceMode.ultimateClone.displayName, 'Clonación profunda');
+    test('Should return correct default English fallbacks', () {
+      expect(SaiaVoiceMode.design.displayName, 'Voice Design');
+      expect(SaiaVoiceMode.clone.displayName, 'Voice Cloning');
+      expect(SaiaVoiceMode.ultimateClone.displayName, 'Deep Cloning');
 
-      expect(SaiaVoiceMode.ultimateClone.description, 'Reproduce cada matiz de la voz original');
+      expect(SaiaVoiceMode.ultimateClone.description, 'Reproduces every nuance of the original voice');
     });
   });
 

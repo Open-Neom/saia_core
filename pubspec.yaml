@@ -1,7 +1,7 @@
 name: saia_core
-description: Standalone AI core models, use cases, and translation contracts for the SAIA ecosystem.
-version: 1.0.0
-homepage: https://github.com/Open-Neom/saia_core
+description: Systemic Artificial Intelligence Agent (SAIA) core models, use cases, and translation contracts.
+version: 1.0.1
+homepage: https://github.com/Open-Neom
 
 environment:
   sdk: ">=3.8.0 <4.0.0"

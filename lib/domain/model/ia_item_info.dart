@@ -2,18 +2,18 @@
 /// Stores pre-generated context so AI doesn't need to process
 /// the PDF/content on every chat session.
 class IaItemInfo {
-
+  /// Unique identifier of the release item.
   String itemId;
 
-  /// Whether AI assistant is enabled for this item
+  /// Whether AI assistant is enabled for this item.
   // ignore: prefer_final_fields
   bool isEnabled;
 
-  /// Custom name for the AI assistant (configured by author in EMXI)
+  /// Custom name for the AI assistant (configured by author in EMXI).
   String agentName;
 
-  /// Personality/tone of the AI (configured by author in EMXI)
-  /// Examples: "friendly and casual", "formal and academic", "mysterious narrator"
+  /// Personality/tone of the AI (configured by author in EMXI).
+  /// Examples: "friendly and casual", "formal and academic", "mysterious narrator".
   String personality;
 
   /// Pre-generated context/summary of the book content.
@@ -21,18 +21,19 @@ class IaItemInfo {
   /// manually edited or regenerated.
   String itemContext;
 
-  /// Additional context or instructions from the author
+  /// Additional context or instructions from the author.
   String authorInstructions;
 
-  /// Timestamp when context was last generated
+  /// Timestamp when context was last generated.
   int contextGeneratedAt;
 
-  /// Language of the content (for response language hints)
+  /// Language of the content (for response language hints).
   String language;
 
-  /// Avatar URL for the AI agent (optional custom avatar)
+  /// Avatar URL for the AI agent (optional custom avatar).
   String avatarUrl;
 
+  /// Default constructor for creating an [IaItemInfo] configuration.
   IaItemInfo({
     this.itemId = '',
     this.isEnabled = false,
@@ -52,6 +53,7 @@ class IaItemInfo {
         'contextGeneratedAt: $contextGeneratedAt, language: $language, avatarUrl: $avatarUrl}';
   }
 
+  /// Deserializes a new [IaItemInfo] from a JSON-compatible [Map].
   IaItemInfo.fromJSON(Map<String, dynamic>? data)
       : itemId = data?['itemId'] ?? '',
         isEnabled = data?['isEnabled'] ?? false,
@@ -63,6 +65,7 @@ class IaItemInfo {
         language = data?['language'] ?? 'es',
         avatarUrl = data?['avatarUrl'] ?? '';
 
+  /// Serializes this [IaItemInfo] into a JSON-compatible [Map].
   Map<String, dynamic> toJSON() => {
         'itemId': itemId,
         'isEnabled': isEnabled,
@@ -75,7 +78,7 @@ class IaItemInfo {
         'avatarUrl': avatarUrl,
       };
 
-  /// Copy with modifications
+  /// Creates a copy of this [IaItemInfo] with optionally overridden properties.
   IaItemInfo copyWith({
     String? itemId,
     bool? isEnabled,
@@ -100,9 +103,9 @@ class IaItemInfo {
     );
   }
 
-  /// Check if context has been generated
+  /// Check if context has been generated.
   bool get hasContext => itemContext.isNotEmpty;
 
-  /// Check if properly configured for chat
+  /// Check if properly configured for chat.
   bool get isReadyForChat => isEnabled && agentName.isNotEmpty && hasContext;
 }

@@ -17,7 +17,7 @@ enum SaiaSpiritRank {
   master,
   legend;
 
-  /// Clave para la localización del nombre del rango.
+  /// Key for the localized display name of this rank.
   String get displayNameKey => switch (this) {
     dormant  => SaiaCoreTranslationConstants.spiritRankDormantName,
     awakened => SaiaCoreTranslationConstants.spiritRankAwakenedName,
@@ -27,7 +27,7 @@ enum SaiaSpiritRank {
     legend   => SaiaCoreTranslationConstants.spiritRankLegendName,
   };
 
-  /// Clave para la localización de la descripción del rango.
+  /// Key for the localized description of this rank.
   String get descriptionKey => switch (this) {
     dormant  => SaiaCoreTranslationConstants.spiritRankDormantDesc,
     awakened => SaiaCoreTranslationConstants.spiritRankAwakenedDesc,
@@ -37,24 +37,24 @@ enum SaiaSpiritRank {
     legend   => SaiaCoreTranslationConstants.spiritRankLegendDesc,
   };
 
-  /// Nombre del rango en español (fallback por defecto).
+  /// The display name of this rank (English default fallback).
   String get displayName => switch (this) {
-    dormant  => 'Dormido',
-    awakened => 'Despierto',
-    trained  => 'Entrenado',
-    veteran  => 'Veterano',
-    master   => 'Maestro',
-    legend   => 'Leyenda',
+    dormant  => 'Dormant',
+    awakened => 'Awakened',
+    trained  => 'Trained',
+    veteran  => 'Veteran',
+    master   => 'Master',
+    legend   => 'Legend',
   };
 
-  /// Descripción del rango en español (fallback por defecto).
+  /// The description of this rank (English default fallback).
   String get description => switch (this) {
-    dormant  => 'Tu espíritu aún no despierta',
-    awakened => 'Las primeras chispas de consciencia',
-    trained  => 'Aprende tu voz y tu estilo',
-    veteran  => 'Reconocido por la comunidad',
-    master   => 'Alineación profunda contigo',
-    legend   => 'Tu espíritu trasciende',
+    dormant  => 'Your spirit has not awakened yet',
+    awakened => 'First sparks of consciousness',
+    trained  => 'Learns your voice and style',
+    veteran  => 'Recognized by the community',
+    master   => 'Deep alignment with you',
+    legend   => 'Your spirit transcends',
   };
 }
 

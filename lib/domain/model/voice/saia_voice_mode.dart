@@ -19,32 +19,32 @@ enum SaiaVoiceMode {
   /// Preserves rhythm, emotion, breathing, micro-pauses.
   ultimateClone;
 
-  /// Clave para la localización del nombre del modo de voz.
+  /// Key for the localized display name of this voice mode.
   String get displayNameKey => switch (this) {
     design        => SaiaCoreTranslationConstants.voiceModeDesignName,
     clone         => SaiaCoreTranslationConstants.voiceModeCloneName,
     ultimateClone => SaiaCoreTranslationConstants.voiceModeUltimateCloneName,
   };
 
-  /// Clave para la localización de la descripción del modo de voz.
+  /// Key for the localized description of this voice mode.
   String get descriptionKey => switch (this) {
     design        => SaiaCoreTranslationConstants.voiceModeDesignDesc,
     clone         => SaiaCoreTranslationConstants.voiceModeCloneDesc,
     ultimateClone => SaiaCoreTranslationConstants.voiceModeUltimateCloneDesc,
   };
 
-  /// Nombre del modo de voz en español (fallback por defecto).
+  /// The display name of this voice mode (English default fallback).
   String get displayName => switch (this) {
-    design        => 'Diseñar voz',
-    clone         => 'Clonar voz',
-    ultimateClone => 'Clonación profunda',
+    design        => 'Voice Design',
+    clone         => 'Voice Cloning',
+    ultimateClone => 'Deep Cloning',
   };
 
-  /// Descripción del modo de voz en español (fallback por defecto).
+  /// The description of this voice mode (English default fallback).
   String get description => switch (this) {
-    design        => 'Crea una voz nueva desde una descripción',
-    clone         => 'Reproduce una voz desde un audio de referencia',
-    ultimateClone => 'Reproduce cada matiz de la voz original',
+    design        => 'Creates a new voice from a text description',
+    clone         => 'Reproduces a voice from a reference audio sample',
+    ultimateClone => 'Reproduces every nuance of the original voice',
   };
 }
 
