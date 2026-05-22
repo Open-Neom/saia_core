@@ -1,3 +1,5 @@
+import '../../../utils/constants/saia_core_translation_constants.dart';
+
 /// The three modes of SAIA voice synthesis.
 ///
 /// Mirrors VoxCPM's architecture so when we switch from ElevenLabs
@@ -17,15 +19,32 @@ enum SaiaVoiceMode {
   /// Preserves rhythm, emotion, breathing, micro-pauses.
   ultimateClone;
 
-  String get displayName => switch (this) {
-    design       => 'Disenar voz',
-    clone        => 'Clonar voz',
-    ultimateClone => 'Clonacion profunda',
+  /// Clave para la localización del nombre del modo de voz.
+  String get displayNameKey => switch (this) {
+    design        => SaiaCoreTranslationConstants.voiceModeDesignName,
+    clone         => SaiaCoreTranslationConstants.voiceModeCloneName,
+    ultimateClone => SaiaCoreTranslationConstants.voiceModeUltimateCloneName,
   };
 
+  /// Clave para la localización de la descripción del modo de voz.
+  String get descriptionKey => switch (this) {
+    design        => SaiaCoreTranslationConstants.voiceModeDesignDesc,
+    clone         => SaiaCoreTranslationConstants.voiceModeCloneDesc,
+    ultimateClone => SaiaCoreTranslationConstants.voiceModeUltimateCloneDesc,
+  };
+
+  /// Nombre del modo de voz en español (fallback por defecto).
+  String get displayName => switch (this) {
+    design        => 'Diseñar voz',
+    clone         => 'Clonar voz',
+    ultimateClone => 'Clonación profunda',
+  };
+
+  /// Descripción del modo de voz en español (fallback por defecto).
   String get description => switch (this) {
-    design       => 'Crea una voz nueva desde una descripcion',
-    clone        => 'Reproduce una voz desde un audio de referencia',
+    design        => 'Crea una voz nueva desde una descripción',
+    clone         => 'Reproduce una voz desde un audio de referencia',
     ultimateClone => 'Reproduce cada matiz de la voz original',
   };
 }
+

@@ -24,3 +24,6 @@ export 'domain/use_cases/vector_index_admin_service.dart';
 
 // ── Constants ──
 export 'utils/constants/saia_route_constants.dart';
+export 'utils/constants/saia_core_translation_constants.dart';
+export 'utils/constants/saia_core_translations.dart';
+

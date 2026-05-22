@@ -1,16 +1,9 @@
 # Changelog
 
-## 1.1.0 — 2026-04-12
+## 1.0.0 — 2026-05-22
 
-- SaiaSpirit: modelo del espiritu IA con powerLevel, rank (6 niveles), auraIntensity
-- SaiaSpiritRank: Dormido, Despierto, Entrenado, Veterano, Maestro, Leyenda
-- SaiaTtsProvider: interface abstracta con 3 modos de voz (design, clone, ultimateClone)
-- SaiaVoiceMode, SaiaVoiceProfile, SaiaTtsRequest, SaiaTtsResult
-
-## 1.0.0 — 2026-03
-
-- IaItemInfo, SaiaJobProgress
-- VectorIndexProgress, VectorIndexJobResult
-- SaiaAdminService, LocalAiService, ImageGenerationService
-- VectorIndexAdminService
-- SaiaRouteConstants
+- **Initial Public Release**: Fully localized and modular AI core interfaces and models for the SAIA ecosystem.
+- **Domain Models**: Added `SaiaSpirit`, `SaiaSpiritRank` enums, `SaiaVoiceMode`, `SaiaVoiceProfile`, `SaiaTtsRequest`, and `SaiaTtsResult`.
+- **AI & Vectoring Use Cases**: Integrated `IaItemInfo`, `SaiaJobProgress`, `LocalAiService`, `SaiaTtsProvider`, `ImageGenerationService`, and `VectorIndexAdminService`.
+- **Localization Support**: Created `SaiaCoreTranslationConstants` and translation resources for English (`SaiaCoreEnTranslations`) and Spanish (`SaiaCoreEsTranslations`).
+- **Premium Documentation**: Created detailed architecture guides, integration snippets, and Mermaid maps in `README.md`.
