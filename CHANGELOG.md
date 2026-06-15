@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased - System updates
+- Actualizaciones de estabilidad y compatibilidad.
+
 ## 1.0.1 — 2026-05-22
 
 - **English Standardization**: Fully standardized all comments, dartdoc APIs, and default fallback names and descriptions to English (e.g. Systemic Artificial Intelligence Agent).

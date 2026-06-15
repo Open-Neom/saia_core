@@ -15,6 +15,7 @@ export 'domain/model/voice/saia_voice_mode.dart';
 export 'domain/model/voice/saia_voice_profile.dart';
 
 // ── Use Cases (abstract contracts) ──
+export 'domain/use_cases/agnostic_brain_service.dart';
 export 'domain/use_cases/ia_context_service.dart';
 export 'domain/use_cases/local_ai_service.dart';
 export 'domain/use_cases/image_generation_service.dart';
