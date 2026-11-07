@@ -1,7 +1,7 @@
 # Changelog
 
-## Unreleased - System updates
-- Actualizaciones de estabilidad y compatibilidad.
+## 1.0.2 — 2026-11-07
+- Add `Open-Neom` GitHub Sponsors `funding`, `repository`, and `issue_tracker` metadata, plus latest ecosystem stability updates.
 
 ## 1.0.1 — 2026-05-22
 
