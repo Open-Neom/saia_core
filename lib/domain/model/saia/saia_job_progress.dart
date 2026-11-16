@@ -43,10 +43,21 @@ class SaiaJobProgress {
     this.currentStep = '',
   });
 
-  double get progress => totalItems > 0 ? processedItems / totalItems : 0.0;
-  int get pendingItems => totalItems - processedItems;
+  double get progress =>
+      totalItems.isFinite && processedItems.isFinite && totalItems > 0
+          ? (processedItems / totalItems).clamp(0.0, 1.0)
+          : 0.0;
+  int get pendingItems =>
+      totalItems.isFinite &&
+              processedItems.isFinite &&
+              totalItems > processedItems
+          ? totalItems - processedItems
+          : 0;
   bool get isRunning => status == SaiaJobStatus.running;
-  bool get isComplete => status == SaiaJobStatus.completed || status == SaiaJobStatus.failed;
+  bool get isComplete =>
+      status == SaiaJobStatus.completed ||
+      status == SaiaJobStatus.failed ||
+      status == SaiaJobStatus.cancelled;
 }
 
 /// Final result of a completed SAIA job.
@@ -69,8 +80,22 @@ class SaiaJobResult {
     this.skippedItems = 0,
   });
 
-  String get summary => '${jobType.displayName}: $message '
-      '($successItems OK, $errorItems errores, $skippedItems omitidos)';
+  static final RegExp _unsafeControlsRe = RegExp(
+    r'[\x00-\x1F\x7F-\x9F\u202A-\u202E\u2066-\u2069\u061C]',
+  );
+  static final RegExp _secretSummaryRe = RegExp(
+    r'(?:Bearer\s+[A-Za-z0-9._\-~+/]+=*|sk-[A-Za-z0-9_\-]{12,}|AIza[0-9A-Za-z_\-]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|glpat-[A-Za-z0-9_\-]{16,}|://[^/\s:@]+:[^/\s@]+@)',
+    caseSensitive: false,
+  );
+
+  String get summary {
+    final safeMessage = message
+        .replaceAll(_unsafeControlsRe, '')
+        .replaceAll(_secretSummaryRe, '[REDACTED]')
+        .trim();
+    return '${jobType.displayName}: $safeMessage '
+        '($successItems OK, $errorItems errores, $skippedItems omitidos)';
+  }
 }
 
 /// Dashboard overview for the admin center.

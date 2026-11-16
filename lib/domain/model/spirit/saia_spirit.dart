@@ -75,26 +75,132 @@ class SaiaSpirit {
   // ══════════════════════════════════════════════════════════
 
   /// Total interactions (replies + feedbacks).
-  int get totalInteractions => itzliReplies + manualReplies + feedbackCount;
+  int get totalInteractions {
+    final safeItzli =
+        itzliReplies.isFinite && itzliReplies > 0 ? itzliReplies : 0;
+    final safeManual =
+        manualReplies.isFinite && manualReplies > 0 ? manualReplies : 0;
+    final safeFeedback =
+        feedbackCount.isFinite && feedbackCount > 0 ? feedbackCount : 0;
+    return safeItzli + safeManual + safeFeedback;
+  }
 
   /// Whether the spirit has been activated (has any activity).
   bool get isActive => totalInteractions > 0;
 
   /// Whether the spirit is considered "trained" (enough feedback).
-  bool get isTrained => feedbackCount >= 10;
+  bool get isTrained => feedbackCount.isFinite && feedbackCount >= 10;
 
   /// Whether the spirit is "aligned" (high confirmation rate).
-  bool get isAligned => confirmationRate >= 0.7 && feedbackCount >= 5;
+  bool get isAligned =>
+      confirmationRate.isFinite &&
+      confirmationRate >= 0.7 &&
+      feedbackCount.isFinite &&
+      feedbackCount >= 5;
 
   /// Spirit power level — composite score for display.
   /// Combines tier, TST, karma, training, and acceptance.
   int get powerLevel {
-    var power = tierLevel * 10;             // 10-50 from subscription
-    power += tstLevel * 5;                  // 0-50 from cognitive level
-    power += (karma ~/ 5).clamp(0, 50);     // 0-50 from reputation
-    power += feedbackCount.clamp(0, 30);    // 0-30 from training
-    power += acceptedAnswers * 3;           // 3 per best answer
+    final safeTier = tierLevel.isFinite ? tierLevel.clamp(0, 5) : 0;
+    final safeTst = tstLevel.isFinite ? tstLevel.clamp(0, 10) : 0;
+    final safeKarma = karma.isFinite ? (karma ~/ 5).clamp(0, 50) : 0;
+    final safeFeedback = feedbackCount.isFinite ? feedbackCount.clamp(0, 30) : 0;
+    final safeAccepted =
+        acceptedAnswers.isFinite ? acceptedAnswers.clamp(0, 10000) : 0;
+    var power = safeTier * 10; // 0-50 from subscription
+    power += safeTst * 5; // 0-50 from cognitive level
+    power += safeKarma; // 0-50 from reputation
+    power += safeFeedback; // 0-30 from training
+    power += safeAccepted * 3; // 3 per best answer (bounded)
     return power;
+  }
+
+  static final RegExp _gemmaChannelRe = RegExp(
+    r'<\|(?:channel|turn)>thought\b[\s\S]*?(?:<(?:channel|turn)\|>|$)',
+    caseSensitive: false,
+  );
+  static final RegExp _internalBlockRe = RegExp(
+    r'<\s*(think|thought|memory_recall|auto_memory|system_context)\b[^>]*>[\s\S]*?(?:<\s*/\s*\1\s*>|$)',
+    caseSensitive: false,
+  );
+  static final RegExp _internalTagRe = RegExp(
+    r'(?:<\s*/?\s*(?:think|thought|memory_recall|auto_memory|system_context)\b[^>]*>|<\|/?turn\|>|<\|(?:channel|turn)\b[^>]*>|<(?:channel|turn)\|>|\[\s*(?:BIOCHIP\s*:[^\]]*|MEMORY_RECALL|AUTO_MEMORY|SYSTEM_CONTEXT)\s*\])',
+    caseSensitive: false,
+  );
+  static final RegExp _unsafeControlOrBidiRe = RegExp(
+    r'[\x00-\x1F\x7F-\x9F\u202A-\u202E\u2066-\u2069\u061C]',
+  );
+
+  static String _truncateUtf16Safe(String input, int maxChars) {
+    if (maxChars <= 0 || input.isEmpty) return '';
+    if (input.length <= maxChars) return input;
+    var end = maxChars;
+    final prev = input.codeUnitAt(end - 1);
+    if (prev >= 0xD800 && prev <= 0xDBFF) {
+      end -= 1;
+    }
+    return end <= 0 ? '' : input.substring(0, end);
+  }
+
+  static String _sanitizeLabel(String raw, {required int maxChars}) {
+    if (raw.isEmpty) return '';
+    var cleaned = raw
+        .replaceAll(_gemmaChannelRe, '')
+        .replaceAll(_internalBlockRe, '')
+        .replaceAll(_internalTagRe, '')
+        .replaceAll(_unsafeControlOrBidiRe, '')
+        .trim();
+    if (cleaned.length > maxChars) {
+      cleaned = _truncateUtf16Safe(cleaned, maxChars).trimRight();
+    }
+    return cleaned;
+  }
+
+  static String _sanitizeUserId(String raw) {
+    final cleaned = _sanitizeLabel(raw, maxChars: 128);
+    if (cleaned.isEmpty ||
+        cleaned == '.' ||
+        cleaned == '..' ||
+        cleaned == '__proto__' ||
+        cleaned == 'constructor' ||
+        cleaned == 'prototype' ||
+        RegExp(r'^__.*__$').hasMatch(cleaned) ||
+        cleaned.contains('/') ||
+        cleaned.contains(r'\') ||
+        cleaned.contains('?') ||
+        cleaned.contains('#')) {
+      return '';
+    }
+    final lower = cleaned.toLowerCase();
+    if (lower.contains('%00') ||
+        lower.contains('%2e') ||
+        lower.contains('%2f') ||
+        lower.contains('%5c')) {
+      return '';
+    }
+    return cleaned;
+  }
+
+  static int _parseFiniteInt(Object? raw, {int fallback = 0}) {
+    if (raw is num) {
+      return raw.isFinite ? raw.toInt() : fallback;
+    }
+    if (raw is String) {
+      return int.tryParse(raw.trim()) ?? fallback;
+    }
+    return fallback;
+  }
+
+  static double _parseFiniteDouble(Object? raw, {double fallback = 0.0}) {
+    if (raw is num) {
+      final d = raw.toDouble();
+      return d.isFinite ? d : fallback;
+    }
+    if (raw is String) {
+      final d = double.tryParse(raw.trim());
+      if (d != null && d.isFinite) return d;
+    }
+    return fallback;
   }
 
   /// Spirit rank based on power level.
@@ -139,22 +245,37 @@ class SaiaSpirit {
     'lastActiveAt': lastActiveAt,
   };
 
-  factory SaiaSpirit.fromJSON(Map<String, dynamic>? data) {
+  factory SaiaSpirit.fromJSON(Map<Object?, Object?>? data) {
     if (data == null) return const SaiaSpirit(userId: '');
+    final rawRate = _parseFiniteDouble(data['confirmationRate']);
+    final cleanRate = rawRate.clamp(0.0, 1.0);
     return SaiaSpirit(
-      userId: data['userId'] as String? ?? '',
-      ownerName: data['ownerName'] as String? ?? '',
-      tierLevel: data['tierLevel'] as int? ?? 0,
-      tstLevel: data['tstLevel'] as int? ?? 0,
-      karma: data['karma'] as int? ?? 0,
-      isRecognized: data['isRecognized'] as bool? ?? false,
-      itzliReplies: data['itzliReplies'] as int? ?? 0,
-      manualReplies: data['manualReplies'] as int? ?? 0,
-      feedbackCount: data['feedbackCount'] as int? ?? 0,
-      confirmationRate: (data['confirmationRate'] as num?)?.toDouble() ?? 0.0,
-      acceptedAnswers: data['acceptedAnswers'] as int? ?? 0,
-      createdAt: data['createdAt'] as int? ?? 0,
-      lastActiveAt: data['lastActiveAt'] as int? ?? 0,
+      userId: _sanitizeUserId(data['userId']?.toString() ?? ''),
+      ownerName:
+          _sanitizeLabel(data['ownerName']?.toString() ?? '', maxChars: 120),
+      tierLevel: _parseFiniteInt(data['tierLevel']).clamp(0, 5),
+      tstLevel: _parseFiniteInt(data['tstLevel']).clamp(0, 10),
+      karma: _parseFiniteInt(data['karma']),
+      isRecognized: data['isRecognized'] == true,
+      itzliReplies: _parseFiniteInt(data['itzliReplies']).clamp(
+        0,
+        100000000,
+      ),
+      manualReplies: _parseFiniteInt(data['manualReplies']).clamp(
+        0,
+        100000000,
+      ),
+      feedbackCount: _parseFiniteInt(data['feedbackCount']).clamp(
+        0,
+        100000000,
+      ),
+      confirmationRate: cleanRate,
+      acceptedAnswers: _parseFiniteInt(data['acceptedAnswers']).clamp(
+        0,
+        100000000,
+      ),
+      createdAt: _parseFiniteInt(data['createdAt']),
+      lastActiveAt: _parseFiniteInt(data['lastActiveAt']),
     );
   }
 
@@ -171,9 +292,14 @@ class SaiaSpirit {
     int? acceptedAnswers,
     int? lastActiveAt,
   }) {
+    final nextRate = confirmationRate != null
+        ? (confirmationRate.isFinite ? confirmationRate.clamp(0.0, 1.0) : 0.0)
+        : this.confirmationRate;
     return SaiaSpirit(
       userId: userId,
-      ownerName: ownerName ?? this.ownerName,
+      ownerName: ownerName != null
+          ? _sanitizeLabel(ownerName, maxChars: 120)
+          : this.ownerName,
       tierLevel: tierLevel ?? this.tierLevel,
       tstLevel: tstLevel ?? this.tstLevel,
       karma: karma ?? this.karma,
@@ -181,7 +307,7 @@ class SaiaSpirit {
       itzliReplies: itzliReplies ?? this.itzliReplies,
       manualReplies: manualReplies ?? this.manualReplies,
       feedbackCount: feedbackCount ?? this.feedbackCount,
-      confirmationRate: confirmationRate ?? this.confirmationRate,
+      confirmationRate: nextRate,
       acceptedAnswers: acceptedAnswers ?? this.acceptedAnswers,
       createdAt: createdAt,
       lastActiveAt: lastActiveAt ?? this.lastActiveAt,

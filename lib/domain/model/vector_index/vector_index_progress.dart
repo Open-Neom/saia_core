@@ -19,4 +19,7 @@ class VectorIndexProgress {
     required this.isComplete,
     required this.progress,
   });
+
+  double get safeProgress =>
+      progress.isFinite ? progress.clamp(0.0, 1.0) : 0.0;
 }

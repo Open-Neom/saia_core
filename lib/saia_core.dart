@@ -1,6 +1,6 @@
 /// SAIA Core — standalone AI foundation.
 /// Zero dependency on neom_core or any Neom module.
-library saia_core;
+library;
 
 // ── Models ──
 export 'domain/model/ia_item_info.dart';
