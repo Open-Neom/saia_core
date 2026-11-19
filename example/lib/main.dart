@@ -128,7 +128,7 @@ class _SaiaDashboardScreenState extends State<SaiaDashboardScreen> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF8A2BE2).withOpacity(0.4),
+            color: const Color(0xFF8A2BE2).withValues(alpha: 0.4),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -154,16 +154,16 @@ class _SaiaDashboardScreenState extends State<SaiaDashboardScreen> {
                   ),
                   Text(
                     'ID: ${_demoSpirit.spiritId}',
-                    style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 12),
+                    style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 12),
                   ),
                 ],
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(color: Colors.white.withOpacity(0.3)),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   children: [
@@ -184,7 +184,7 @@ class _SaiaDashboardScreenState extends State<SaiaDashboardScreen> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
+                  color: Colors.white.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.auto_awesome, color: Colors.white, size: 28),
@@ -201,7 +201,7 @@ class _SaiaDashboardScreenState extends State<SaiaDashboardScreen> {
                     const SizedBox(width: 4),
                     Text(
                       rankDesc,
-                      style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 14),
+                      style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 14),
                     ),
                   ],
                 ),
@@ -213,7 +213,7 @@ class _SaiaDashboardScreenState extends State<SaiaDashboardScreen> {
             borderRadius: BorderRadius.circular(10),
             child: LinearProgressIndicator(
               value: _demoSpirit.auraIntensity,
-              backgroundColor: Colors.white.withOpacity(0.15),
+              backgroundColor: Colors.white.withValues(alpha: 0.15),
               color: Colors.white,
               minHeight: 8,
             ),
@@ -247,7 +247,7 @@ class _SaiaDashboardScreenState extends State<SaiaDashboardScreen> {
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withOpacity(0.05)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -271,7 +271,7 @@ class _SaiaDashboardScreenState extends State<SaiaDashboardScreen> {
                   Expanded(
                     child: Text(
                       rankDesc,
-                      style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 12),
+                      style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 12),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -301,12 +301,12 @@ class _SaiaDashboardScreenState extends State<SaiaDashboardScreen> {
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white.withOpacity(0.05)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
           ),
           child: ListTile(
             contentPadding: EdgeInsets.zero,
             leading: CircleAvatar(
-              backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+              backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
               child: Icon(
                 _getVoiceIcon(mode),
                 color: Theme.of(context).colorScheme.secondary,
@@ -318,7 +318,7 @@ class _SaiaDashboardScreenState extends State<SaiaDashboardScreen> {
             ),
             subtitle: Text(
               modeDesc,
-              style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 13),
+              style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 13),
             ),
           ),
         );
